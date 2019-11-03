@@ -1,9 +1,9 @@
 const fs = require('fs')
-const ffmpeg = require('fluent-ffmpeg')
-const inquirer = require('inquirer');
 const superagent = require('superagent')
 const cheerio = require('cheerio')
 const ora = require('ora')
+const inquirer = require('inquirer');
+const ffmpeg = require('fluent-ffmpeg')
 
 const utils = {
   /**
