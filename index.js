@@ -10,6 +10,12 @@ const utils = {
     const hmsArr = hms.split(':')
 
     return (+hmsArr[0]) * 60 * 60 + (+hmsArr[1]) * 60 + (+hmsArr[2])
+  },
+
+  secondsToHms(seconds) {
+    const date = new Date(null)
+    date.setSeconds(seconds)
+    return date.toISOString().substr(11, 8)
   }
 }
 
@@ -109,6 +115,7 @@ const downloader = {
       ffmpeg
         .ffprobe(this.DOWNLOAD_PATH, (err, metadata) => {
           const videoDuration = metadata.format.duration
+          endTime = endTime || utils.secondsToHms(videoDuration)
           const startSecond = utils.hmsToSeconds(startTime)
           const endSecond = utils.hmsToSeconds(endTime)
           const cutDuration = (videoDuration - startSecond) - (videoDuration - endSecond)
