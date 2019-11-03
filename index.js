@@ -97,14 +97,14 @@ const downloader = {
       {
         type: 'input',
         name: 'startTime',
-        message: '请输入开始时间 (HH:mm:ss)',
+        message: '请输入开始时间, 默认为 00:00:00 (HH:mm:ss)',
         default: '00:00:00',
         when: ({ needCut }) => needCut
       },
       {
         type: 'input',
         name: 'endTime',
-        message: '请输入结束时间? (HH:mm:ss)',
+        message: '请输入结束时间, 默认为视频结束时间 (HH:mm:ss)',
         when: ({ needCut }) => needCut
       }
     ]).then(({ needCut, startTime, endTime }) => {
