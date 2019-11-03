@@ -139,7 +139,7 @@ const downloader = {
             .setStartTime(startTime)
             .setDuration(cutDuration)
             .saveToFile(this.CUT_RESULT_PATH)
-            .on('end', function () {
+            .on('end', () => {
               cutting.succeed(`已成功裁剪视频，输出为 ${this.CUT_RESULT_PATH} `)
             })
         })
