@@ -3,7 +3,6 @@ const ffmpeg = require('fluent-ffmpeg')
 const inquirer = require('inquirer');
 const superagent = require('superagent')
 const cheerio = require('cheerio')
-const request = require('request')
 const ora = require('ora')
 
 const utils = {
@@ -57,14 +56,24 @@ const downloader = {
     return downloadLink
   },
 
+  downloadVideo(downloadLink) {
+    console.log(`${downloadLink}\n`)
+    if (!downloadLink) {
+      console.log('获取下载链接失败')
+      return
+    }
     const downloading = ora('正在下载视频...\n').start()
-    const file = fs.createWriteStream('gcw.mp4')
-    request(downloadLink).pipe(file)
+
+    const file = fs.createWriteStream(this.DOWNLOAD_PATH)
     file.on('close', () => {
       downloading.succeed('已成功下载视频\n')
 
       this.cutVideo()
     })
+
+    superagent
+      .get(downloadLink)
+      .pipe(file)
   },
 
   cutVideo() {
