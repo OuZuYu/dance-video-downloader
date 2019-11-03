@@ -15,24 +15,47 @@ const utils = {
 }
 
 const downloader = {
+  url: process.argv[2],
   run() {
+    if (!this.url) {
+      console.log('请输入 51广场舞 或 糖豆广场舞 地址')
+      return
+    }
+
     const scraping = ora('正在抓取网页...\n').start()
 
     superagent
-      .get(process.argv[2])
+      .get(this.url)
       .end((err, res) => {
         if (err) {
           return console.log(err)
         }
-        scraping.succeed('已成功抓取到网页\n')
+        scraping.succeed('\n已成功抓取到网页\n')
 
-        this.downloadVideo(res.text)
+        const downloadLink = this.getDownloadLink(res.text)
+        this.downloadVideo(downloadLink)
       })
   },
 
-  downloadVideo(html) {
+  is51Gcw(url) {
+    return url.indexOf('51gcw') > -1
+  },
+
+  isTangDou(url) {
+    return url.indexOf('tangdou') > -1
+  },
+
+  getDownloadLink(html) {
     const $ = cheerio.load(html)
-    const downloadLink = $('.play_xz_mp4 a').eq(1).attr('href')
+    let downloadLink
+    if (this.is51Gcw(this.url)) {
+      downloadLink = $('.play_xz_mp4 a').eq(1).attr('href')
+    } else if (this.isTangDou(this.url)) {
+      const match = this.videoUrlReg.exec(html)
+      downloadLink = match && match[1]
+    }
+    return downloadLink
+  },
 
     const downloading = ora('正在下载视频...\n').start()
     const file = fs.createWriteStream('gcw.mp4')
