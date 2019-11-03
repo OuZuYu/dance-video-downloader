@@ -6,12 +6,20 @@ const cheerio = require('cheerio')
 const ora = require('ora')
 
 const utils = {
+  /**
+   * HH:mm:ss 转换成秒数
+   * @param {string} hms 时间，格式为HH:mm:ss
+   */
   hmsToSeconds(hms) {
     const hmsArr = hms.split(':')
 
     return (+hmsArr[0]) * 60 * 60 + (+hmsArr[1]) * 60 + (+hmsArr[2])
   },
 
+  /**
+   * 秒数转换成 HH:mm:ss
+   * @param {number}} seconds 秒数
+   */
   secondsToHms(seconds) {
     const date = new Date(null)
     date.setSeconds(seconds)
