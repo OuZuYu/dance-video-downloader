@@ -39,7 +39,7 @@ const downloader = {
         if (err) {
           return console.log(err)
         }
-        scraping.succeed('\n已成功抓取到网页\n')
+        scraping.succeed('已成功抓取到网页\n')
 
         const downloadLink = this.getDownloadLink(res.text)
         this.downloadVideo(downloadLink)
