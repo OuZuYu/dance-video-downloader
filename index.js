@@ -15,6 +15,10 @@ const utils = {
 
 const downloader = {
   url: process.argv[2],
+  VIDEO_URL_REG: /video:\s?'(https?\:\/\/\S+)'/,
+  DOWNLOAD_PATH: 'gcw.mp4',
+  CUT_RESULT_PATH: 'gcw_cut.mp4',
+
   run() {
     if (!this.url) {
       console.log('请输入 51广场舞 或 糖豆广场舞 地址')
@@ -50,7 +54,7 @@ const downloader = {
     if (this.is51Gcw(this.url)) {
       downloadLink = $('.play_xz_mp4 a').eq(1).attr('href')
     } else if (this.isTangDou(this.url)) {
-      const match = this.videoUrlReg.exec(html)
+      const match = this.VIDEO_URL_REG.exec(html)
       downloadLink = match && match[1]
     }
     return downloadLink
@@ -102,27 +106,26 @@ const downloader = {
         process.exit()
       }
 
-      let videoDuration, cutDuration
       ffmpeg
-        .ffprobe('./gcw.mp4', (err, metadata) => {
+        .ffprobe(this.DOWNLOAD_PATH, (err, metadata) => {
+          const videoDuration = metadata.format.duration
           const startSecond = utils.hmsToSeconds(startTime)
           const endSecond = utils.hmsToSeconds(endTime)
-          videoDuration = metadata.format.duration
-          cutDuration = (videoDuration - startSecond) - (videoDuration - endSecond)
+          const cutDuration = (videoDuration - startSecond) - (videoDuration - endSecond)
 
-          console.log(`开始时间：${startTime}`)
+          console.log(`\n开始时间：${startTime}`)
           console.log(`结束时间：${endTime}`)
           console.log(`开始时间(s)：${startSecond}`)
           console.log(`结束时间(s)：${endSecond}`)
-          console.log(`裁剪后时长(s)：${cutDuration}`)
+          console.log(`裁剪后时长(s)：${cutDuration}\n`)
 
           const cutting = ora('正在裁剪视频...\n').start()
-          ffmpeg('./gcw.mp4')
+          ffmpeg(this.DOWNLOAD_PATH)
             .setStartTime(startTime)
             .setDuration(cutDuration)
-            .saveToFile('result.mp4')
+            .saveToFile(this.CUT_RESULT_PATH)
             .on('end', function () {
-              cutting.succeed('已成功裁剪视频，输出为 result.mp4 ')
+              cutting.succeed(`已成功裁剪视频，输出为 ${this.CUT_RESULT_PATH} `)
             })
         })
 
