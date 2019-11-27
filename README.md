@@ -3,7 +3,7 @@
 
 ## 使用
 ```
-node index ${tangdou url / 51gcw url}
+node index ${tangdou url || 51gcw url}
 ```
 
 ![使用](https://user-gold-cdn.xitu.io/2019/11/12/16e5b6969ce9da8d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
