@@ -123,10 +123,9 @@ const downloader = {
       ffmpeg
         .ffprobe(this.DOWNLOAD_PATH, (err, metadata) => {
           const videoDuration = metadata.format.duration
-          endTime = endTime || utils.secondsToHms(videoDuration)
           const startSecond = utils.hmsToSeconds(startTime)
-          const endSecond = utils.hmsToSeconds(endTime)
-          const cutDuration = (videoDuration - startSecond) - (videoDuration - endSecond)
+          const endSecond = endTime ? utils.hmsToSeconds(endTime) : videoDuration
+          const cutDuration = endSecond - startSecond
 
           console.log(`\n开始时间：${startTime}`)
           console.log(`结束时间：${endTime}`)
